@@ -8,11 +8,11 @@ namespace Jets.Database
         [Key]
         public Guid Id { get; set; }
 
-        [Required, MinLength(5), MaxLength(100)]        
+        [Required, MinLength(5), MaxLength(16)]        
         public string Username { get; set; }
 
-        [Required, MinLength(7), MaxLength(16)]
-        public string Password { get; set; }
+        [Required]
+        public string PasswordHash { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 

@@ -6,19 +6,26 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System;
 using SendModels.Requests;
+using Jets.Services;
+using SendModels.Responses;
+using SendModels;
+using NLog;
 
 namespace Jets
 {
     public class RoomManager : IEventHandle
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly SynchronizedCollection<IRoom> _roomList;
         private readonly SynchronizedCollection<Client> _clientList;
+        private readonly ClientService _clientService;
 
         public RoomManager()
         {
             _clientList = new SynchronizedCollection<Client>();
-
             _roomList = new SynchronizedCollection<IRoom>();
+            _clientService = new ClientService();
         }
 
         public void AddClient(TcpClient tcpClient)
@@ -27,17 +34,11 @@ namespace Jets
 
             Subscribe(client);
 
-            //var messageRoom = new MessageRoom();
-            //messageRoom.OnCloseRoom += MessageRoom_OnCloseRoom;
-            //messageRoom.Cycle();
-
-            //messageRoom.AddClient(client);
-
-            //_roomList.Add(messageRoom);
-
             _clientList.Add(client);
 
             client.Start();
+
+            logger.Log(LogLevel.Info, $"{nameof(AddClient)}{client}");
         }
 
         private void Client_OnDisconnected(Client client)
@@ -49,7 +50,9 @@ namespace Jets
                 room.RemoveClient(client);
             });
 
-            _clientList.Remove(client);      
+            _clientList.Remove(client);
+
+            logger.Log(LogLevel.Info, $"{nameof(Client_OnDisconnected)}{client}");
         }
 
         private void MessageRoom_OnCloseRoom(IRoom room)
@@ -57,14 +60,26 @@ namespace Jets
             _roomList.Remove(room);
         }
 
-        private void Client_OnSignIn(Client client, Request<SignInRequest> logIn)
+        private void Client_OnSignIn(Client client, Request<SignInRequest> request)
         {
-            throw new NotImplementedException();
+            Response<SignInResponse> response = _clientService.SignIn(request);
+
+            byte[] data = Utils.ObjectToByteArray(response, RequestsMap.GetKeyByValue(typeof(Response<SignInResponse>)).Value);
+
+            client.Write(data);
+
+            logger.Log(LogLevel.Info, $"{nameof(Client_OnSignIn)}{response}");
         }
 
-        private void Client_OnSignUp(Client client, Request<SignUpRequest> signUp)
+        private void Client_OnSignUp(Client client, Request<SignUpRequest> request)
         {
-            throw new NotImplementedException();
+            Response<SignUpResponse> response = _clientService.SignUp(request);
+
+            byte[] data = Utils.ObjectToByteArray(response, RequestsMap.GetKeyByValue(typeof(Response<SignUpResponse>)).Value);
+
+            client.Write(data);
+
+            logger.Log(LogLevel.Info, $"{nameof(Client_OnSignUp)}{response}");
         }
 
         #region subcribe on events

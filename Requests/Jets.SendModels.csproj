@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Responses\SignInResponse.cs" />
     <Compile Include="Responses\SignUpResponse.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="Requests\Request.cs" />

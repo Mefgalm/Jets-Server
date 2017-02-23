@@ -122,5 +122,10 @@ namespace Jets.ClientParts
                 OnSignIn(this, obj as Request<SignInRequest>);
             }
         }
+
+        public override string ToString()
+        {
+            return "Client";
+        }
     }
 }

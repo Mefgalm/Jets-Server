@@ -1,5 +1,6 @@
 ﻿using Jets.Interfaces;
 using Jets.Services.Context;
+using NLog;
 using System;
 using System.Data.Entity;
 using System.Net;
@@ -12,6 +13,8 @@ namespace Jets
     {
         private TcpListener _tcpListener;
         private RoomManager _roomManager;
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public Server()
         {
@@ -30,6 +33,7 @@ namespace Jets
 
         public Task Start()
         {
+            logger.Info("Server start listen");
             return Task.Run(() =>
             {
                 bool isNoErros = true;
@@ -40,6 +44,9 @@ namespace Jets
                     while (isNoErros)
                     {
                         TcpClient client = _tcpListener.AcceptTcpClient();
+
+                        logger.Info($"Client connected : {client}");
+
                         _roomManager.AddClient(client);
                     }
                 }

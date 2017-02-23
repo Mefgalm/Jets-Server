@@ -1,4 +1,5 @@
 ﻿using SendModels.Requests;
+using SendModels.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace SendModels
                 { 1, typeof(Request<SignInRequest>) },
                 { 2, typeof(Request<SignUpRequest>) },
                 { 3, typeof(Request<ChatMessageRequest>) },
+                { 4, typeof(Response<SignInResponse>) },
+                { 5, typeof(Response<SignUpResponse>) },
             };
         }
 

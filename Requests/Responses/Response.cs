@@ -1,5 +1,8 @@
-﻿namespace SendModels.Responses
+﻿using System;
+
+namespace SendModels.Responses
 {
+    [Serializable]
     public class Response<T>
     {
         public Response()
@@ -23,5 +26,10 @@
         public string ErrorMessage { get; set; }
 
         public T DataObject { get; set; }
+
+        public override string ToString()
+        {
+            return $"Staus : {Status}, ErrorMessage: {ErrorMessage}, DataObject: {DataObject?.ToString()}";
+        }
     }
 }

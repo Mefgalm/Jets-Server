@@ -52,6 +52,8 @@
     <Compile Include="ClientService.cs" />
     <Compile Include="Context\JetsDbConfiguration.cs" />
     <Compile Include="Context\JetsDatabaseContext.cs" />
+    <Compile Include="Helpers\Crypto.cs" />
+    <Compile Include="Helpers\TokenCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
